@@ -1,0 +1,15 @@
+version: '3'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: ./env/app/Dockerfile
+    volumes:
+      - ./app:/app
+  app-debug:
+    build:
+      context: .
+      dockerfile: ./env/app-debug/Dockerfile
+    volumes:
+      - ./app:/app
+      - ./env/app-debug/php.ini-development:/usr/local/etc/php/php.ini
