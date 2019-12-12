@@ -2,6 +2,5 @@
 node_modules
 vendor
 .env
-/app/storage
 coverage-report.xml
 .phpunit.result.cache
