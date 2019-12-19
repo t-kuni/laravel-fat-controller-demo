@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class TableA extends Model
+class FatDbAccess extends Model
 {
     //
 }
