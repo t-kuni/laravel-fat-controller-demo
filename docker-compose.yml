@@ -16,6 +16,14 @@ services:
     volumes:
       - ./app:/var/www/app
 
+  app-debug:
+    build:
+      context: env/app
+    command: php -v
+    volumes:
+      - ./app:/var/www/app
+      - ./app-debug/php.ini-development:/usr/local/etc/php/php.ini
+
   web:
     build:
       context: env/web
