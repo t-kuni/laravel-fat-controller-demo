@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\FatActionRequest;
 use App\TableA;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class FatController extends Controller
 {
@@ -25,6 +26,8 @@ class FatController extends Controller
         file_put_contents('/tmp/aaa', $content);
 
         // メール送信
+        Mail::send('mail.blade.php', [], function($mail) {
+        });
 
         // レンダリング
         return view('aaa');

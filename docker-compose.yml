@@ -1,15 +1,34 @@
 version: '3'
 services:
+  db:
+    image: mysql:8.0.18
+    ports:
+      - "33060:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=demo
+    restart: always
+
   app:
     build:
-      context: .
-      dockerfile: ./env/app/Dockerfile
+      context: env/app
+    restart: always
     volumes:
-      - ./app:/app
-  app-debug:
+      - ./app:/var/www/app
+
+  web:
     build:
-      context: .
-      dockerfile: ./env/app-debug/Dockerfile
+      context: env/web
+    ports:
+      - "80:80"
     volumes:
-      - ./app:/app
-      - ./env/app-debug/php.ini-development:/usr/local/etc/php/php.ini
+      - ./app:/var/www/app
+    depends_on:
+      - app
+    restart: always
+
+  mta:
+    image: mailhog/mailhog
+    ports:
+      - "8025:8025"
+    restart: always
