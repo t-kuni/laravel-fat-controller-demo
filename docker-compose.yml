@@ -1,7 +1,8 @@
 version: '3'
 services:
   db:
-    image: mysql:8.0.18
+    build:
+      context: env/db
     ports:
       - "33060:3306"
     environment:

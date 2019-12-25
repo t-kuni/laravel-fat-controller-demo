@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\FatDbAccess;
 use App\Http\Requests\FatActionRequest;
+use Carbon\Carbon;
 use Illuminate\Mail\Mailable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\Facades\Auth;
@@ -16,12 +17,15 @@ class FatController extends Controller
     public function fatAction(FatActionRequest $request)
     {
         // ログインユーザを取得する
-//        $user = Auth::user();
+        $user = Auth::user();
 
-        // DBにアクセスする
-        $records = FatDbAccess::get(1);
+        // 現在日時を取得する
+        $now = Carbon::now();
+
+        // DBのデータを更新する
+        $records = FatDbAccess::all();
         foreach ($records as $record) {
-            $record->name = 'fat-man';
+            $record->text = $request->input('new_text');
             $record->save();
         }
 
@@ -30,8 +34,8 @@ class FatController extends Controller
         file_put_contents('/tmp/fat-file.json', json_encode($content));
 
         // メールを送信する
-        Mail::send(['text' => 'fat-email'], ['message' => 'I\'m fat email!'], function($message) {
-            $message->to('example@example.com')
+        Mail::send(['text' => 'fat-email'], ['message' => 'I\'m fat email!'], function($message) use ($user) {
+            $message->to($user->email)
                 ->subject('I\'m fat email!');
         });
 

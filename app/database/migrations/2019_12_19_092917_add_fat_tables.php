@@ -16,7 +16,7 @@ class AddFatTables extends Migration
         //
         Schema::create('fat_db_accesses', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
+            $table->string('text');
 
             $table->timestamps();
         });
