@@ -7,11 +7,15 @@ use App\Http\Controllers\FatController;
 use App\Http\Requests\FatActionRequest;
 use App\User;
 use Carbon\Carbon;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\View;
 
 class FatControllerTest extends \Tests\TestCase
 {
+    use DatabaseTransactions;
+
     /**
      * @test
      */
@@ -52,18 +56,22 @@ class FatControllerTest extends \Tests\TestCase
             'new_text' => 'updated'
         ]);
         $controller = new FatController();
-        $controller->fatAction($request);
+        $response = $controller->fatAction($request);
 
         #
         # 事後状態確認
         #
-        // DBのレコードが更新されているか？
+        // DBのレコードが正しく更新されているか？
         $this->assertDatabaseHas('fat_db_accesses', [
             'text' => 'updated'
         ]);
-        // メールが送信されているか？
+
+        // メールが正しく送信されているか？
         $this->assertEquals('test@test.test', $mailHeads[0]->to);
         $this->assertEquals('I\'m fat email!', $mailHeads[0]->subject);
+
+        // レンダリング結果を確認する
+        $this->assertStringContainsString('fat controller', $response->render());
     }
 
     private function createMessageMock()
